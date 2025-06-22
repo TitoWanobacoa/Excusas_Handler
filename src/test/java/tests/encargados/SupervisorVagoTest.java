@@ -6,7 +6,9 @@ import encargados.evaluacion.EvaluacionVaga;
 import modelo.Empleado;
 import modelo.ITipoExcusa;
 import modelo.Moderada;
+import servicios.AdministradorProntuario;
 import servicios.EmailSenderFake;
+import servicios.IAdministradorProntuario;
 import servicios.IEmailSender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,9 +21,10 @@ class SupervisorVagoTest {
     @BeforeEach
     void setUp() {
         IEmailSender emailSender = new EmailSenderFake();
+        IAdministradorProntuario admin = AdministradorProntuario.getInstancia();
 
         Encargado supervisor = new Supervisor(emailSender);
-        Encargado ceo = new CEO(emailSender);
+        Encargado ceo = new CEO(emailSender, admin);
         Encargado rechazador = new RechazadorExcusas();
 
         // ⚠️ Supervisor está en modo vago

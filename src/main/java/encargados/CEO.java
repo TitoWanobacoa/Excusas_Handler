@@ -1,18 +1,22 @@
 package encargados;
 
-import encargados.evaluacion.EvaluacionNormal;
+
 import modelo.Excusa;
-import servicios.AdministradorProntuario;
+
+import servicios.IAdministradorProntuario;
 import servicios.IEmailSender;
 import servicios.IObservador;
 
 public class CEO extends Encargado implements IObservador {
     private final IEmailSender emailSender;
+    private final IAdministradorProntuario admin;
 
-    public CEO(IEmailSender emailSender) {
+    public CEO(IEmailSender emailSender, IAdministradorProntuario admin) {
         this.emailSender = emailSender;
-        AdministradorProntuario.getInstancia().agregarObservador(this);
+        this.admin = admin;
     }
+
+
 
     @Override
     public boolean aceptaCompleja() {
@@ -21,13 +25,12 @@ public class CEO extends Encargado implements IObservador {
 
     @Override
     public void procesar(Excusa excusa) {
-        AdministradorProntuario.getInstancia().guardarProntuario(excusa);
-
+        admin.guardarProntuario(excusa);
         emailSender.enviarEmail(
                 excusa.getEmpleado().getEmail(),
                 "ceo@excusas.sa",
-                "Aprobado por creatividad",
-                "Tu excusa ha sido aceptada. Se inició un prontuario."
+                "Aprobado",
+                "Tu excusa ha sido aceptada por creatividad."
         );
     }
 

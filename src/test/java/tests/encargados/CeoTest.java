@@ -22,7 +22,7 @@ class CeoTest {
     @BeforeEach
     void setUp() {
         emailSender = new EmailSenderFake();
-        ceo = new CEO(emailSender);
+        ceo = new CEO(emailSender, AdministradorProntuario.getInstancia()); // ✅
         ceo.setEstrategia(new EvaluacionProductiva(emailSender));
 
         AdministradorProntuario.getInstancia().agregarObservador(ceo);

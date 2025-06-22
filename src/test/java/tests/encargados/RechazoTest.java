@@ -4,7 +4,9 @@ import encargados.*;
 import encargados.evaluacion.EvaluacionNormal;
 import modelo.Empleado;
 import modelo.ITipoExcusa;
+import servicios.AdministradorProntuario;
 import servicios.EmailSenderFake;
+import servicios.IAdministradorProntuario;
 import servicios.IEmailSender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,11 +27,13 @@ class RechazoTest {
     @BeforeEach
     void setUp() {
         IEmailSender emailSender = new EmailSenderFake();
+        IAdministradorProntuario admin = AdministradorProntuario.getInstancia();
+
 
         Encargado recepcionista = new Recepcionista(emailSender);
         Encargado supervisor = new Supervisor(emailSender);
         Encargado gerente = new GerenteRRHH(emailSender);
-        Encargado ceo = new CEO(emailSender);
+        Encargado ceo = new CEO(emailSender, admin);
         Encargado rechazador = new RechazadorExcusas();
 
         recepcionista.setEstrategia(new EvaluacionNormal());

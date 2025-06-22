@@ -22,12 +22,13 @@ class CadenaResponsabilidadTest {
     @BeforeEach
     void setUp() {
         IEmailSender emailSender = new EmailSenderFake();
+        AdministradorProntuario admin = AdministradorProntuario.getInstancia();
 
         // Encargados
         Encargado recepcionista = new Recepcionista(emailSender);
         Encargado supervisor = new Supervisor(emailSender);
         Encargado gerente = new GerenteRRHH(emailSender);
-        Encargado ceo = new CEO(emailSender);
+        Encargado ceo = new CEO(emailSender, admin);
         Encargado rechazador = new RechazadorExcusas();
 
         // Estrategias

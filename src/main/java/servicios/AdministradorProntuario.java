@@ -2,7 +2,7 @@ package servicios;
 
 import modelo.Excusa;
 
-public class AdministradorProntuario extends Observable {
+public class AdministradorProntuario extends Observable implements IAdministradorProntuario {
     private static AdministradorProntuario instancia;
 
     private AdministradorProntuario() {}
@@ -13,9 +13,14 @@ public class AdministradorProntuario extends Observable {
         }
         return instancia;
     }
-
+    @Override
     public void guardarProntuario(Excusa excusa) {
         System.out.println("📝 Prontuario guardado para " + excusa.getEmpleado().getNombre());
-        this.notificar("Se guardó una excusa", excusa);
+        notificar("Se guardó una excusa", excusa);
+    }
+
+    @Override
+    public void agregarObservador(IObservador o) {
+        super.agregarObservador(o);
     }
 }
