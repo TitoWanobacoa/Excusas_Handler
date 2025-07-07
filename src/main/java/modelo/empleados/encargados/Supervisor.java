@@ -1,13 +1,13 @@
-package encargados;
+package modelo.empleados.encargados;
 
-import encargados.evaluacion.EvaluacionNormal;
-import modelo.Excusa;
+import modelo.excusas.Excusa;
 import servicios.IEmailSender;
 
 public class Supervisor extends Encargado {
     private final IEmailSender emailSender;
 
-    public Supervisor(IEmailSender emailSender) {
+    public Supervisor(String nombre, String email, int legajo, IEmailSender emailSender) {
+        super(nombre, email, legajo);
         this.emailSender = emailSender;
     }
 
@@ -18,13 +18,11 @@ public class Supervisor extends Encargado {
 
     @Override
     public void procesar(Excusa excusa) {
-        // Aquí podrías distinguir si es por corte de luz o cuidado familiar
-        String cuerpo = "La excusa fue aceptada.";
         emailSender.enviarEmail(
                 excusa.getEmpleado().getEmail(),
-                "supervisor@excusas.sa",
-                "Consulta por excusa moderada",
-                cuerpo
+                "supervision@excusas.sa",
+                "Evaluación en curso",
+                "Tu excusa está siendo evaluada por el supervisor."
         );
     }
 }

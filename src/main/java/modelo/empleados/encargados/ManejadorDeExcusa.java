@@ -1,8 +1,8 @@
-package encargados;
+package modelo.empleados.encargados;
 
-import modelo.Empleado;
-import modelo.Excusa;
-import modelo.ITipoExcusa;
+import modelo.empleados.Empleado;
+import modelo.excusas.Excusa;
+import modelo.excusas.ITipoExcusa;
 
 public class ManejadorDeExcusa {
     private final Encargado encargadoInicial;
@@ -14,8 +14,8 @@ public class ManejadorDeExcusa {
         this.encargadoInicial = encargados[0];
     }
 
-    public void recibirExcusa(String motivo, Empleado empleado, ITipoExcusa tipo) {
-        Excusa excusa = new Excusa(empleado, tipo);
+    public void recibirExcusa(String descripcion, Empleado empleado, ITipoExcusa tipo) {
+        Excusa excusa = new Excusa(empleado, tipo, descripcion);
         encargadoInicial.manejarExcusa(excusa);
     }
 }

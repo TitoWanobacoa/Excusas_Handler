@@ -1,6 +1,6 @@
-package modelo;
+package modelo.excusas;
 
-import encargados.Encargado;
+import modelo.empleados.encargados.Encargado;
 
 public interface ITipoExcusa {
     boolean puedeSerAtendidaPor(Encargado encargado);

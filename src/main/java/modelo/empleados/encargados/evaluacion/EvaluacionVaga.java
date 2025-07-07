@@ -1,7 +1,7 @@
-package encargados.evaluacion;
+package modelo.empleados.encargados.evaluacion;
 
-import encargados.Encargado;
-import modelo.Excusa;
+import modelo.empleados.encargados.Encargado;
+import modelo.excusas.Excusa;
 
 public class EvaluacionVaga implements IEvaluacionExcusa {
     @Override

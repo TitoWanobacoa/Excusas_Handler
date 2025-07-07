@@ -1,11 +1,16 @@
-package encargados;
+package modelo.empleados.encargados;
 
-import encargados.evaluacion.IEvaluacionExcusa;
-import modelo.Excusa;
+import modelo.empleados.Empleado;
+import modelo.empleados.encargados.evaluacion.IEvaluacionExcusa;
+import modelo.excusas.Excusa;
 
-public abstract class Encargado {
+public abstract class Encargado extends Empleado {
     private Encargado siguiente;
     protected IEvaluacionExcusa estrategia;
+
+    public Encargado(String nombre, String email, int legajo) {
+        super(nombre, email, legajo);
+    }
 
     public void setSiguiente(Encargado siguiente) {
         this.siguiente = siguiente;
@@ -15,7 +20,6 @@ public abstract class Encargado {
         return siguiente;
     }
 
-    // Template Method
     public final void manejarExcusa(Excusa excusa) {
         estrategia.evaluar(this, excusa);
     }
@@ -28,17 +32,14 @@ public abstract class Encargado {
         }
     }
 
-    // Hooks para definir qué tipo de excusas puede atender
     public boolean aceptaTrivial()     { return false; }
     public boolean aceptaModerada()    { return false; }
     public boolean aceptaCompleja()    { return false; }
     public boolean aceptaInverosimil() { return false; }
 
-    // Metodo que define el comportamiento específico al procesar
-    public abstract void procesar(Excusa excusa);
-
     public void setEstrategia(IEvaluacionExcusa estrategia) {
         this.estrategia = estrategia;
     }
 
+    public abstract void procesar(Excusa excusa);
 }

@@ -1,9 +1,9 @@
 package tests.modelo;
 
-import modelo.Empleado;
-import modelo.Excusa;
-import modelo.Trivial;
-import modelo.ITipoExcusa;
+import modelo.empleados.Empleado;
+import modelo.excusas.Excusa;
+import modelo.excusas.Trivial;
+import modelo.excusas.ITipoExcusa;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,7 +15,8 @@ class ExcusaTest {
         Empleado empleado = new Empleado("Laura", "laura@mail.com", 1001);
         ITipoExcusa tipo = new Trivial();
 
-        Excusa excusa = new Excusa(empleado, tipo);
+        Excusa excusa = new Excusa(empleado, tipo, "Excusa trivial de test");
+
 
         assertEquals("Laura", excusa.getEmpleado().getNombre());
         assertEquals("laura@mail.com", excusa.getEmpleado().getEmail());

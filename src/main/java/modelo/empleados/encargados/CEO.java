@@ -1,22 +1,20 @@
-package encargados;
+package modelo.empleados.encargados;
 
-
-import modelo.Excusa;
-
+import modelo.excusas.Excusa;
 import servicios.IAdministradorProntuario;
 import servicios.IEmailSender;
 import servicios.IObservador;
+import servicios.NotificacionExcusa;
 
 public class CEO extends Encargado implements IObservador {
     private final IEmailSender emailSender;
     private final IAdministradorProntuario admin;
 
-    public CEO(IEmailSender emailSender, IAdministradorProntuario admin) {
+    public CEO(String nombre, String email, int legajo, IEmailSender emailSender, IAdministradorProntuario admin) {
+        super(nombre, email, legajo);
         this.emailSender = emailSender;
         this.admin = admin;
     }
-
-
 
     @Override
     public boolean aceptaCompleja() {
@@ -28,18 +26,18 @@ public class CEO extends Encargado implements IObservador {
         admin.guardarProntuario(excusa);
         emailSender.enviarEmail(
                 excusa.getEmpleado().getEmail(),
-                "ceo@excusas.sa",
+                this.getEmail(),
                 "Aprobado",
                 "Tu excusa ha sido aceptada por creatividad."
         );
     }
 
     @Override
-    public void actualizar(String mensaje, Object contexto) {
-        if (contexto instanceof Excusa excusa) {
-            System.out.println("🔔 CEO notificado: " + mensaje);
-            System.out.println("  - Empleado: " + excusa.getEmpleado().getNombre());
-            System.out.println("  - Motivo: " + excusa.getTipo().getClass().getSimpleName());
+    public void actualizar(NotificacionExcusa notificacion) {
+        System.out.println("Notificación recibida por el CEO:");
+        if (notificacion.getEncargado() != null) {
+            System.out.println("- Encargado: " + notificacion.getEncargado().getNombre());
         }
+        System.out.println("- Excusa: " + notificacion.getExcusa().getDescripcion());
     }
 }

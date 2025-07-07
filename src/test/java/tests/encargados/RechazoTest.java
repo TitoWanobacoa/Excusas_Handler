@@ -1,9 +1,9 @@
 package tests.encargados;
 
-import encargados.*;
-import encargados.evaluacion.EvaluacionNormal;
-import modelo.Empleado;
-import modelo.ITipoExcusa;
+import modelo.empleados.encargados.*;
+import modelo.empleados.encargados.evaluacion.EvaluacionNormal;
+import modelo.empleados.Empleado;
+import modelo.excusas.ITipoExcusa;
 import servicios.AdministradorProntuario;
 import servicios.EmailSenderFake;
 import servicios.IAdministradorProntuario;
@@ -11,7 +11,7 @@ import servicios.IEmailSender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-// Tipo que no acepta ningún encargado (falso para todos)
+
 class TipoInvalido implements ITipoExcusa {
     @Override
     public boolean puedeSerAtendidaPor(Encargado encargado) {
@@ -30,11 +30,12 @@ class RechazoTest {
         IAdministradorProntuario admin = AdministradorProntuario.getInstancia();
 
 
-        Encargado recepcionista = new Recepcionista(emailSender);
-        Encargado supervisor = new Supervisor(emailSender);
-        Encargado gerente = new GerenteRRHH(emailSender);
-        Encargado ceo = new CEO(emailSender, admin);
-        Encargado rechazador = new RechazadorExcusas();
+        Encargado recepcionista = new Recepcionista("Recepcionista", "recepcion@excusas.sa", 201, new EmailSenderFake());
+        Encargado supervisor = new Supervisor("Supervisor", "supervision@excusas.sa", 202, new EmailSenderFake());
+        Encargado gerente = new GerenteRRHH("Gerente RRHH", "rrhh@excusas.sa", 123, emailSender);
+        Encargado ceo = new CEO("CEO", "ceo@excusas.sa", 999, emailSender, admin);
+        Encargado rechazador = new RechazadorExcusas("Rechazador", "rechazo@excusas.sa", 203, new EmailSenderFake());
+
 
         recepcionista.setEstrategia(new EvaluacionNormal());
         supervisor.setEstrategia(new EvaluacionNormal());
@@ -52,6 +53,6 @@ class RechazoTest {
         ITipoExcusa excusaNoValida = new TipoInvalido();
         empleado.excusarse("Excusa no aceptada por nadie", excusaNoValida, manejador);
 
-        // Ver consola: "Excusa rechazada: necesitamos pruebas contundentes."
+
     }
 }

@@ -14,9 +14,10 @@ public abstract class Observable {
         observadores.remove(o);
     }
 
-    protected void notificar(String mensaje, Object contexto) {
+    protected void notificar(NotificacionExcusa notificacion) {
         for (IObservador o : observadores) {
-            o.actualizar(mensaje, contexto);
+            o.actualizar(notificacion);
         }
     }
+
 }

@@ -1,11 +1,11 @@
 package tests.encargados;
 
-import encargados.*;
-import encargados.evaluacion.EvaluacionNormal;
-import encargados.evaluacion.EvaluacionVaga;
-import modelo.Empleado;
-import modelo.ITipoExcusa;
-import modelo.Moderada;
+import modelo.empleados.encargados.*;
+import modelo.empleados.encargados.evaluacion.EvaluacionNormal;
+import modelo.empleados.encargados.evaluacion.EvaluacionVaga;
+import modelo.empleados.Empleado;
+import modelo.excusas.ITipoExcusa;
+import modelo.excusas.Moderada;
 import servicios.AdministradorProntuario;
 import servicios.EmailSenderFake;
 import servicios.IAdministradorProntuario;
@@ -23,14 +23,15 @@ class SupervisorVagoTest {
         IEmailSender emailSender = new EmailSenderFake();
         IAdministradorProntuario admin = AdministradorProntuario.getInstancia();
 
-        Encargado supervisor = new Supervisor(emailSender);
-        Encargado ceo = new CEO(emailSender, admin);
-        Encargado rechazador = new RechazadorExcusas();
+        Encargado supervisor = new Supervisor("Supervisor", "supervision@excusas.sa", 202, emailSender);
+        Encargado ceo = new CEO("CEO", "ceo@excusas.sa", 999, emailSender, admin);
+        Encargado rechazador = new RechazadorExcusas("Rechazador", "rechazo@excusas.sa", 203, new EmailSenderFake());
 
-        // ⚠️ Supervisor está en modo vago
+
+
         supervisor.setEstrategia(new EvaluacionVaga());
 
-        // El CEO sí procesa si es necesario (modo normal)
+
         ceo.setEstrategia(new EvaluacionNormal());
         rechazador.setEstrategia(new EvaluacionNormal());
 
@@ -44,8 +45,6 @@ class SupervisorVagoTest {
         ITipoExcusa excusaModerada = new Moderada();
         empleado.excusarse("Corte de luz", excusaModerada, manejador);
 
-        // Como el supervisor es vago, no la procesa.
-        // El CEO no acepta excusas moderadas, así que pasará también.
-        // Rechazador debe imprimir mensaje final.
+
     }
 }

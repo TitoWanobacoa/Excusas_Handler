@@ -1,13 +1,13 @@
-package encargados;
+package modelo.empleados.encargados;
 
-import encargados.evaluacion.EvaluacionNormal;
-import modelo.Excusa;
+import modelo.excusas.Excusa;
 import servicios.IEmailSender;
 
 public class Recepcionista extends Encargado {
     private final IEmailSender emailSender;
 
-    public Recepcionista(IEmailSender emailSender) {
+    public Recepcionista(String nombre, String email, int legajo, IEmailSender emailSender) {
+        super(nombre, email, legajo);
         this.emailSender = emailSender;
     }
 
@@ -18,12 +18,11 @@ public class Recepcionista extends Encargado {
 
     @Override
     public void procesar(Excusa excusa) {
-        String mensaje = "La licencia fue aceptada.";
         emailSender.enviarEmail(
                 excusa.getEmpleado().getEmail(),
-                "recepcionista@excusas.sa",
-                "Motivo demora",
-                mensaje
+                "recepcion@excusas.sa",
+                "Recibida",
+                "Tu excusa fue recibida por la recepción. Estamos evaluando."
         );
     }
 }

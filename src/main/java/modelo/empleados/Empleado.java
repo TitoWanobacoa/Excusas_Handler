@@ -1,6 +1,7 @@
-package modelo;
+package modelo.empleados;
 
-import encargados.ManejadorDeExcusa;
+import modelo.empleados.encargados.ManejadorDeExcusa;
+import modelo.excusas.ITipoExcusa;
 
 public class Empleado {
     private final String nombre;

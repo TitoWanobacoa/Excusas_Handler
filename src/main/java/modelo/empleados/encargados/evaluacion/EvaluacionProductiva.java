@@ -1,7 +1,7 @@
-package encargados.evaluacion;
+package modelo.empleados.encargados.evaluacion;
 
-import encargados.Encargado;
-import modelo.Excusa;
+import modelo.empleados.encargados.Encargado;
+import modelo.excusas.Excusa;
 import servicios.AdministradorProntuario;
 import servicios.IEmailSender;
 
@@ -14,12 +14,10 @@ public class EvaluacionProductiva implements IEvaluacionExcusa {
 
     @Override
     public void evaluar(Encargado encargado, Excusa excusa) {
-        // Se evalúa normalmente
         if (excusa.getTipo().puedeSerAtendidaPor(encargado)) {
             AdministradorProntuario.getInstancia().guardarProntuario(excusa);
             encargado.procesar(excusa);
         } else {
-            // Notifica al CTO antes de pasar
             emailSender.enviarEmail(
                     "cto@excusas.sa",
                     "notificador-productivo@excusas.sa",

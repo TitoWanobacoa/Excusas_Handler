@@ -1,13 +1,13 @@
-package encargados;
+package modelo.empleados.encargados;
 
-import encargados.evaluacion.EvaluacionNormal;
-import modelo.Excusa;
+import modelo.excusas.Excusa;
 import servicios.IEmailSender;
 
 public class GerenteRRHH extends Encargado {
     private final IEmailSender emailSender;
 
-    public GerenteRRHH(IEmailSender emailSender) {
+    public GerenteRRHH(String nombre, String email, int legajo, IEmailSender emailSender) {
+        super(nombre, email, legajo);
         this.emailSender = emailSender;
     }
 
@@ -26,3 +26,4 @@ public class GerenteRRHH extends Encargado {
         );
     }
 }
+

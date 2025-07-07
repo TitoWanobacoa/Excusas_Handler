@@ -1,28 +1,29 @@
 package tests.encargados;
 
-import encargados.*;
-import encargados.evaluacion.EvaluacionProductiva;
-import modelo.Compleja;
-import modelo.Empleado;
-import modelo.Excusa;
-import modelo.ITipoExcusa;
-import servicios.AdministradorProntuario;
-import servicios.EmailSenderFake;
-import servicios.IEmailSender;
+import modelo.empleados.Empleado;
+import modelo.empleados.encargados.CEO;
+import modelo.empleados.encargados.evaluacion.EvaluacionProductiva;
+import modelo.excusas.Compleja;
+import modelo.excusas.Excusa;
+import modelo.excusas.ITipoExcusa;
+import servicios.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 class CeoTest {
 
-    private CEO ceo;
-    private IEmailSender emailSender;
+    private CEOFake ceo;
+    private EmailSenderFake emailSender;
     private Empleado empleado;
     private ITipoExcusa tipoExcusa;
 
     @BeforeEach
     void setUp() {
         emailSender = new EmailSenderFake();
-        ceo = new CEO(emailSender, AdministradorProntuario.getInstancia()); // ✅
+        ceo = new CEOFake(emailSender, AdministradorProntuario.getInstancia());
         ceo.setEstrategia(new EvaluacionProductiva(emailSender));
 
         AdministradorProntuario.getInstancia().agregarObservador(ceo);
@@ -33,9 +34,37 @@ class CeoTest {
 
     @Test
     void testCeoProcesaExcusaCompleja() {
-        Excusa excusa = new Excusa(empleado, tipoExcusa);
+        Excusa excusa = new Excusa(empleado, tipoExcusa, "Excusa de prueba compleja");
         ceo.manejarExcusa(excusa);
 
-        // Ver consola: email + notificación + mensaje de prontuario
+        assertEquals("martin@test.com", emailSender.getUltimoDestinatario());
+        assertEquals("ceo@excusas.sa", emailSender.getUltimoRemitente());
+        assertEquals("Aprobado", emailSender.getUltimoAsunto());
+        assertEquals("Tu excusa ha sido aceptada por creatividad.", emailSender.getUltimoCuerpo());
+
+        NotificacionExcusa notificacion = ceo.getUltimaNotificacion();
+        assertNotNull(notificacion);
+        assertEquals("Martín", notificacion.getExcusa().getEmpleado().getNombre());
+        assertEquals(tipoExcusa, notificacion.getExcusa().getTipo());
+    }
+
+    static class CEOFake extends CEO {
+        private NotificacionExcusa ultimaNotificacion;
+
+        public CEOFake(IEmailSender emailSender, IAdministradorProntuario admin) {
+            super("CEO Fake", "ceo@fake.com", 999, emailSender, admin);
+        }
+
+
+        @Override
+        public void actualizar(NotificacionExcusa notificacion) {
+            super.actualizar(notificacion);
+            this.ultimaNotificacion = notificacion;
+        }
+
+        public NotificacionExcusa getUltimaNotificacion() {
+            return ultimaNotificacion;
+        }
     }
 }
+

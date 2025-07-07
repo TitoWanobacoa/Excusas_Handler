@@ -1,9 +1,10 @@
 package tests.encargados;
 
-import encargados.*;
-import encargados.evaluacion.EvaluacionNormal;
-import encargados.evaluacion.EvaluacionProductiva;
-import modelo.*;
+import modelo.empleados.encargados.*;
+import modelo.empleados.encargados.evaluacion.EvaluacionNormal;
+import modelo.empleados.encargados.evaluacion.EvaluacionProductiva;
+import modelo.empleados.Empleado;
+import modelo.excusas.*;
 import servicios.AdministradorProntuario;
 import servicios.EmailSenderFake;
 import servicios.IEmailSender;
@@ -25,11 +26,11 @@ class CadenaResponsabilidadTest {
         AdministradorProntuario admin = AdministradorProntuario.getInstancia();
 
         // Encargados
-        Encargado recepcionista = new Recepcionista(emailSender);
-        Encargado supervisor = new Supervisor(emailSender);
-        Encargado gerente = new GerenteRRHH(emailSender);
-        Encargado ceo = new CEO(emailSender, admin);
-        Encargado rechazador = new RechazadorExcusas();
+        Encargado recepcionista = new Recepcionista("Recepcionista", "recepcion@excusas.sa", 201, new EmailSenderFake());
+        Encargado supervisor = new Supervisor("Supervisor", "supervision@excusas.sa", 202, new EmailSenderFake());
+        Encargado gerente = new GerenteRRHH("Gerente RRHH", "rrhh@excusas.sa", 123, emailSender);
+        Encargado ceo = new CEO("CEO", "ceo@excusas.sa", 999, emailSender, admin);
+        Encargado rechazador = new RechazadorExcusas("Rechazador", "rechazo@excusas.sa", 203, new EmailSenderFake());
 
         // Estrategias
         recepcionista.setEstrategia(new EvaluacionNormal());
@@ -50,19 +51,19 @@ class CadenaResponsabilidadTest {
 
     @Test
     void testCadenaCompletaConDistintosTipos() {
-        // Trivial → Recepcionista
+        // Trivial a Recepcionista
         empleadoTrivial.excusarse("Me quedé dormida", new Trivial(), manejador);
 
-        // Moderada → Supervisor
+        // Moderada a Supervisor
         empleadoModerado.excusarse("Cuidé a un familiar", new Moderada(), manejador);
 
-        // Inverosímil → Gerente
+        // Inverosímil a Gerente
         empleadoInverosimil.excusarse("Una paloma robó mi bici", new Inverosimil(), manejador);
 
-        // Compleja → CEO
+        // Compleja a CEO
         empleadoComplejo.excusarse("Fui abducido por aliens", new Compleja(), manejador);
 
-        // No aceptada por nadie → Rechazador
+        // No aceptada por nadie, a Rechazador
         ITipoExcusa tipoFalso = new ITipoExcusa() {
             @Override
             public boolean puedeSerAtendidaPor(Encargado encargado) {
@@ -71,6 +72,5 @@ class CadenaResponsabilidadTest {
         };
         empleadoNoValido.excusarse("No tenía ganas", tipoFalso, manejador);
 
-        // Verificá la consola para asegurarte de que cada encargado respondió lo que corresponde.
     }
 }

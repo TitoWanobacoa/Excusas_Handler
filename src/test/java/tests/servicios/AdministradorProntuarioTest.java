@@ -1,14 +1,15 @@
 package tests.servicios;
 
-import encargados.Encargado;
-import modelo.Empleado;
-import modelo.Excusa;
-import modelo.ITipoExcusa;
-import modelo.Trivial;
+
+import modelo.empleados.Empleado;
+import modelo.excusas.Excusa;
+import modelo.excusas.ITipoExcusa;
+import modelo.excusas.Trivial;
 import servicios.AdministradorProntuario;
 import servicios.IObservador;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import servicios.NotificacionExcusa;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,17 +21,14 @@ class AdministradorProntuarioTest {
     private ITipoExcusa tipo;
 
     private static class TestObservador implements IObservador {
-        String mensajeRecibido = null;
         Excusa excusaRecibida = null;
 
         @Override
-        public void actualizar(String mensaje, Object contexto) {
-            this.mensajeRecibido = mensaje;
-            if (contexto instanceof Excusa excusa) {
-                this.excusaRecibida = excusa;
-            }
+        public void actualizar(NotificacionExcusa notificacion) {
+            this.excusaRecibida = notificacion.getExcusa();
         }
     }
+
 
     @BeforeEach
     void setUp() {
@@ -44,12 +42,12 @@ class AdministradorProntuarioTest {
 
     @Test
     void testNotificaObservadoresAlGuardarExcusa() {
-        Excusa excusa = new Excusa(empleado, tipo);
+        Excusa excusa = new Excusa(empleado, tipo, "Excusa usada para guardar en prontuario");
         admin.guardarProntuario(excusa);
 
-        assertNotNull(observador.mensajeRecibido);
-        assertEquals("Se guardó una excusa", observador.mensajeRecibido);
         assertNotNull(observador.excusaRecibida);
+        assertEquals("Excusa usada para guardar en prontuario", observador.excusaRecibida.getDescripcion());
         assertEquals(excusa, observador.excusaRecibida);
     }
+
 }
